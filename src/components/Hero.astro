@@ -1,0 +1,125 @@
+---
+// Hero component - contains the main introduction section
+---
+
+<section class="hero">
+	<div class="hero-content">
+		<div class="text-content">
+			<h1 class="name">Jadon Zhu</h1>
+			<p class="introduction">Applied Mathematics at the University of California, Los Angeles</p>
+			<div class="hero-links">
+				<a href="https://www.linkedin.com/in/jadon-zhu/" class="hero-link linkedin-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+				<a href="/src/assets/JadonZhu-Resume.pdf" class="hero-link resume-link" target="_blank" rel="noopener noreferrer">Resume</a>
+			</div>
+		</div>
+		<div class="headshot" role="img" aria-label="Jadon Zhu"></div>
+	</div>
+</section>
+
+<style>
+	.hero {
+		min-height: 100vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(135deg, var(--beige) 0%, var(--soft-yellow) 100%);
+		padding: 2rem;
+	}
+
+	.hero-content {
+		max-width: 1000px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		gap: 3rem;
+	}
+
+	.text-content {
+		flex: 1;
+		text-align: left;
+	}
+
+	.headshot {
+		width: 300px;
+		height: 300px;
+		border-radius: 50%;
+		background-image: url('/src/assets/professional-headshot.JPG');
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		border: 4px solid var(--beige);
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+		flex-shrink: 0;
+	}
+
+	.name {
+		font-size: 3.5rem;
+		font-weight: 700;
+		margin: 0;
+		color: var(--text-dark);
+		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.introduction {
+		font-size: 1.25rem;
+		color: var(--text-muted);
+		margin: 0 0 1.5rem 0;
+		font-weight: 500;
+	}
+
+	.hero-links {
+		display: flex;
+		gap: 2rem;
+		margin-bottom: 2rem;
+	}
+
+	.hero-link {
+		color: var(--text-dark);
+		text-decoration: none;
+		font-weight: 600;
+		font-size: 1.1rem;
+		padding: 0.5rem 1rem;
+		border-radius: 6px;
+		transition: all 0.3s ease;
+		border: 2px solid transparent;
+		background-color: #ede9d5;
+	}
+
+	.hero-link:hover {
+		background-color: var(--text-dark);
+		color: var(--beige);
+		border-color: var(--text-dark);
+	}
+
+
+	@media (max-width: 768px) {
+		.hero-content {
+			flex-direction: column;
+			gap: 2rem;
+		}
+
+		.name {
+			font-size: 2.5rem;
+		}
+
+		.introduction {
+			font-size: 1.1rem;
+		}
+
+		.hero-links {
+			gap: 1rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.hero-link {
+			font-size: 1rem;
+			padding: 0.4rem 0.8rem;
+		}
+
+		.headshot {
+			width: 200px;
+			height: 200px;
+		}
+	}
+</style>

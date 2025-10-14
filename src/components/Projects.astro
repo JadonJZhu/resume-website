@@ -1,0 +1,163 @@
+---
+// Projects component - contains the projects showcase section
+---
+
+<section class="projects">
+	<h2>Projects</h2>
+	<div class="projects-grid">
+		<div class="project-card project-with-image motorola-project">
+			<img src="/src/assets/projects/motorola/military-radio.jpg" alt="Military Radio Project">
+		</div>
+		<div class="project-card project-with-image twnh-project">
+			<img src="/src/assets/projects/tnwh/tnwh.gif" alt="There is Nothing Wrong Here Project">
+		</div>
+		<div class="project-card project-with-image jamnesia-project">
+			<img src="/src/assets/projects/jamnesia/jamnesia.gif" alt="Jamnesia Project">
+		</div>
+		<div class="project-card project-with-image semel-project">
+			<img src="/src/assets/projects/semel/semel.jpg" alt="UCLA Semel Institute for Neuroscience Project">
+		</div>
+	</div>
+</section>
+
+<style>
+	.projects {
+		padding: 4rem 2rem;
+		background-color: var(--beige);
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.projects h2 {
+		font-size: 2.5rem;
+		font-weight: 700;
+		color: var(--text-dark);
+		margin-bottom: 3rem;
+		text-align: center;
+	}
+
+	.projects-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 2rem;
+		max-width: 800px;
+		width: 100%;
+	}
+
+	.project-card {
+		background-color: var(--soft-yellow);
+		border-radius: 12px;
+		padding: 2rem;
+		text-align: center;
+		cursor: pointer;
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		border: 2px solid transparent;
+		min-height: 200px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+	}
+
+	.project-card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+		border-color: var(--text-muted);
+	}
+
+	.project-with-image {
+		padding: 0;
+		position: relative;
+		aspect-ratio: 5 / 3;
+	}
+
+	.project-with-image img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 10px;
+	}
+
+	.project-with-image:hover::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(0, 0, 0, 0.7);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		color: white;
+		font-size: 1.2rem;
+		font-weight: 400;
+		text-align: center;
+		white-space: pre-line;
+		border-radius: 10px;
+		z-index: 1;
+	}
+
+	.project-with-image:hover::after::first-line {
+		font-weight: 600;
+	}
+
+	.motorola-project:hover::after {
+		content: "Motorola \A Software Engineering Intern, 2025";
+	}
+
+	.twnh-project:hover::after {
+		content: "There is Nothing Wrong Here \A Programmer, 2025";
+	}
+
+	.jamnesia-project:hover::after {
+		content: "Jamnesia \A Programmer, 2025";
+	}
+
+	.semel-project:hover::after {
+		content: "UCLA Semel Institute for Neuroscience \A Machine Learning, 2025";
+	}
+
+	.project-card h3 {
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: var(--text-dark);
+		margin: 0 0 0.5rem 0;
+	}
+
+	.project-card p {
+		color: var(--text-muted);
+		margin: 0;
+		font-size: 0.9rem;
+	}
+
+	@media (max-width: 768px) {
+		.projects {
+			padding: 2rem 1rem;
+			min-height: auto;
+		}
+
+		.projects h2 {
+			font-size: 2rem;
+			margin-bottom: 2rem;
+		}
+
+		.projects-grid {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+		}
+
+		.project-card {
+			padding: 1.5rem;
+			min-height: 150px;
+		}
+	}
+</style>
