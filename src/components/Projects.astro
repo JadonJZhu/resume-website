@@ -1,9 +1,5 @@
 ---
 // Projects component - contains the projects showcase section
-import motorolaImg from '@/assets/projects/motorola/military-radio.jpg';
-import tnwhImg from '@/assets/projects/tnwh/tnwh.gif';
-import jamnesiaImg from '@/assets/projects/jamnesia/jamnesia.gif';
-import semelImg from '@/assets/projects/semel/semel.jpg';
 
 const projects = {
 	motorola: {
@@ -40,16 +36,16 @@ const projects = {
 <section class="projects">
 	<div class="projects-grid">
 		<div class="project-card project-with-image motorola-project">
-			<img src={motorolaImg.src} alt="Military Radio Project">
+			<img src="/projects/motorola/military-radio.jpg" alt="Military Radio Project">
 		</div>
 		<div class="project-card project-with-image twnh-project">
-			<img src={tnwhImg.src} alt="There is Nothing Wrong Here Project">
+			<img src="/projects/tnwh/tnwh.gif" alt="There is Nothing Wrong Here Project">
 		</div>
 		<div class="project-card project-with-image jamnesia-project">
-			<img src={jamnesiaImg.src} alt="Jamnesia Project">
+			<img src="/projects/jamnesia/jamnesia.gif" alt="Jamnesia Project">
 		</div>
 		<div class="project-card project-with-image semel-project">
-			<img src={semelImg.src} alt="UCLA Semel Institute for Neuroscience Project">
+			<img src="/projects/semel/semel.jpg" alt="UCLA Semel Institute for Neuroscience Project">
 		</div>
 	</div>
 </section>
@@ -75,7 +71,7 @@ const projects = {
 	</div>
 </div>
 
-<script define:vars={{ projects, motorolaImg, tnwhImg, jamnesiaImg, semelImg }}>
+<script define:vars={{ projects }}>
 	document.addEventListener('DOMContentLoaded', () => {
 		const modal = document.getElementById('project-modal');
 		const modalImage = document.getElementById('modal-image');
@@ -87,10 +83,10 @@ const projects = {
 
 		// Map project keys to image paths
 		const projectImages = {
-			motorola: motorolaImg.src,
-			tnwh: tnwhImg.src,
-			jamnesia: jamnesiaImg.src,
-			semel: semelImg.src
+			motorola: '/projects/motorola/military-radio.jpg',
+			tnwh: '/projects/tnwh/tnwh.gif',
+			jamnesia: '/projects/jamnesia/jamnesia.gif',
+			semel: '/projects/semel/semel.jpg'
 		};
 
 		// Function to open modal with project data
