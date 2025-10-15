@@ -1,15 +1,16 @@
 ---
 // Hero component - contains the main introduction section
+import headshot from '../assets/professional-headshot.jpg';
 ---
 
-<section class="hero">
+<section class="hero" style={`--headshot-url: url(${headshot.src})`}>
 	<div class="hero-content">
 		<div class="text-content">
 			<h1 class="name">Jadon Zhu</h1>
 			<p class="introduction">Applied Mathematics at the University of California, Los Angeles</p>
 			<div class="hero-links">
 				<a href="https://www.linkedin.com/in/jadon-zhu/" class="hero-link linkedin-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-				<a href="/src/assets/JadonZhu-Resume.pdf" class="hero-link resume-link" target="_blank" rel="noopener noreferrer">Resume</a>
+				<a href="/JadonZhu-Resume.pdf" class="hero-link resume-link" target="_blank" rel="noopener noreferrer">Resume</a>
 				<a href="mailto:jadonzhu@g.ucla.edu" class="hero-link email-link">Email</a>
 			</div>
 		</div>
@@ -45,7 +46,7 @@
 		width: 300px;
 		height: 300px;
 		border-radius: 50%;
-		background-image: url('/src/assets/professional-headshot.JPG');
+		background-image: var(--headshot-url);
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;

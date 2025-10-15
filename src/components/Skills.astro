@@ -1,5 +1,10 @@
 ---
 // Skills component - contains the skills showcase section
+import pythonImg from '../assets/skills/python.png';
+import cImg from '../assets/skills/c.png';
+import mlImg from '../assets/skills/machine-learning.png';
+import golangImg from '../assets/skills/golang.png';
+import godotImg from '../assets/skills/godot.png';
 ---
 
 <section class="skills">
@@ -7,23 +12,23 @@
 		<h2 class="skills-title">Skills and Experiences</h2>
 		<div class="skills-list">
 			<div class="skill-item">
-				<img src="/src/assets/skills/python.png" alt="Python" class="skill-logo">
+				<img src={pythonImg.src} alt="Python" class="skill-logo">
 				<span class="skill-text">Python</span>
 			</div>
 			<div class="skill-item">
-				<img src="/src/assets/skills/c.png" alt="C" class="skill-logo">
+				<img src={cImg.src} alt="C" class="skill-logo">
 				<span class="skill-text">C</span>
 			</div>
             <div class="skill-item">
-                <img src="/src/assets/skills/machine-learning.png" alt="Machine Learning" class="skill-logo">
+                <img src={mlImg.src} alt="Machine Learning" class="skill-logo">
                 <span class="skill-text">Machine Learning</span>
             </div>
 			<div class="skill-item">
-				<img src="/src/assets/skills/golang.png" alt="Golang" class="skill-logo">
+				<img src={golangImg.src} alt="Golang" class="skill-logo">
 				<span class="skill-text">Golang</span>
 			</div>
 			<div class="skill-item">
-				<img src="/src/assets/skills/godot.png" alt="Godot" class="skill-logo">
+				<img src={godotImg.src} alt="Godot" class="skill-logo">
 				<span class="skill-text">Godot</span>
 			</div>
 		</div>
