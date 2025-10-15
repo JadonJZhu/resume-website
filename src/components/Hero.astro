@@ -3,7 +3,7 @@
 import headshot from '@/assets/professional-headshot.jpg';
 ---
 
-<section class="hero" style={`--headshot-url: url(${headshot.src})`}>
+<section class="hero">
 	<div class="hero-content">
 		<div class="text-content">
 			<h1 class="name">Jadon Zhu</h1>
@@ -14,7 +14,7 @@ import headshot from '@/assets/professional-headshot.jpg';
 				<a href="mailto:jadonzhu@g.ucla.edu" class="hero-link email-link">Email</a>
 			</div>
 		</div>
-		<div class="headshot" role="img" aria-label="Jadon Zhu"></div>
+		<img src={headshot.src} width={headshot.width} height={headshot.height} alt="Jadon Zhu" class="headshot" />
 	</div>
 </section>
 
@@ -46,10 +46,8 @@ import headshot from '@/assets/professional-headshot.jpg';
 		width: 300px;
 		height: 300px;
 		border-radius: 50%;
-		background-image: var(--headshot-url);
-		background-size: cover;
-		background-position: center;
-		background-repeat: no-repeat;
+		object-fit: cover;
+		object-position: center;
 		border: 4px solid var(--beige);
 		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 		flex-shrink: 0;
