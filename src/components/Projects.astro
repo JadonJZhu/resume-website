@@ -1,9 +1,39 @@
 ---
 // Projects component - contains the projects showcase section
+
+const projects = {
+	motorola: {
+		title: "Motorola Solutions",
+		role: "Software Engineering Intern",
+		time: "Summer 2025",
+		description: "At <a href='https://silvustechnologies.com/' target='_blank' rel='noopener noreferrer'>Silvus Technologies</a>, a Motorola Solutions Company specializing in military-grade mobile wireless communications systems, I served as an embedded systems and test engineering intern. My responsibilities included automating API method documentation using large-language models and Python, developing programmatic input validation in Golang to secure legacy C APIs, configuring Docker containers for consistent embedded firmware compilation environments, and integrating memory-safe parsing functions into legacy C programs using CGo in a cross-compilation setup.",
+		skills: ["Python", "Golang", "Docker", "C", "CGo", "Large Language Models", "Embedded Systems", "API Security", "Cross-compilation"]
+	},
+	tnwh: {
+		title: "There is Nothing Wrong Here",
+		role: "Programmer",
+		time: "Fall 2025",
+		description: "For this psychological horror visual novel submitted to the <a href='https://itch.io/jam/spooktober-2025' target='_blank' rel='noopener noreferrer'>Spooktober 2025 Visual Novel Jam</a>, I served as lead programmer on a team of 4 writers, 3 artists, and 2 programmers. We built it using Godot and GDscript, emphasizing clean and modular code through inheritance and composition patterns. Players can experience the game at <a href='https://jadonz.itch.io/there-is-nothing-wrong-here' target='_blank' rel='noopener noreferrer'>here</a>.",
+		skills: ["Godot", "GDscript", "Leadership", "Game Development", "Object-Oriented Programming", "Clean Code Architecture"]
+	},
+	jamnesia: {
+		title: "Jamnesia",
+		role: "Programmer",
+		time: "Spring 2025",
+		description: "I was a lead programmer in an award-winning game development team that won over $6000 in prize value as part of the <a href='https://itch.io/jam/ucla-fiat-ludum-2025' target='_blank' rel='noopener noreferrer'>Fiat Ludum Game Jam</a> competition at UCLA. Players can experience the game at <a href='https://jadonz.itch.io/jamnesia' target='_blank' rel='noopener noreferrer'>here</a>.",
+		skills: ["Godot", "GDScript", "Game Development", "Leadership"]
+	},
+	semel: {
+		title: "UCLA Semel Institute for Neuroscience",
+		role: "Machine Learning",
+		time: "2024-2025",
+		description: "At the UCLA Semel Institute for Neuroscience, as a volunteer for the <a href='https://yanglab.npih.ucla.edu/?page_id=18' target='_blank' rel='noopener noreferrer'>X. William Yang Lab</a>, I trained a convolutional neural network (CNN) to segment 3-D images of mouse brain neurons, developed Python scripts as plugins to ImageJ to facilitate rapid, automated 3-D image processing, and reconstructed 3-D images of neurons manually using the digital imaging software Neutube.",
+		skills: ["Python", "Convolutional Neural Networks", "Image Processing", "Machine Learning", "ImageJ", "Neutube"]
+	}
+};
 ---
 
 <section class="projects">
-	<h2>Projects</h2>
 	<div class="projects-grid">
 		<div class="project-card project-with-image motorola-project">
 			<img src="/src/assets/projects/motorola/military-radio.jpg" alt="Military Radio Project">
@@ -20,31 +50,148 @@
 	</div>
 </section>
 
+<!-- Project Modal -->
+<div id="project-modal" class="project-modal">
+	<div class="modal-content">
+		<span class="close-button">&times;</span>
+		<div class="modal-header">
+			<h3 id="modal-title"></h3>
+			<span id="modal-year" class="project-year"></span>
+		</div>
+		<div class="modal-image-container">
+			<img id="modal-image" src="" alt="Project Cover" />
+		</div>
+		<div class="modal-body">
+			<p id="modal-description"></p>
+			<div class="skills">
+				<h4>Skills Used:</h4>
+				<div id="modal-skills" class="skill-tags"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script define:vars={{ projects }}>
+	document.addEventListener('DOMContentLoaded', () => {
+		const modal = document.getElementById('project-modal');
+		const modalImage = document.getElementById('modal-image');
+		const modalTitle = document.getElementById('modal-title');
+		const modalYear = document.getElementById('modal-year');
+		const modalDescription = document.getElementById('modal-description');
+		const modalSkills = document.getElementById('modal-skills');
+		const closeButton = document.querySelector('.close-button');
+
+		// Map project keys to image paths
+		const projectImages = {
+			motorola: '/src/assets/projects/motorola/military-radio.jpg',
+			tnwh: '/src/assets/projects/tnwh/tnwh.gif',
+			jamnesia: '/src/assets/projects/jamnesia/jamnesia.gif',
+			semel: '/src/assets/projects/semel/semel.jpg'
+		};
+
+		// Function to open modal with project data
+		function openModal(projectKey) {
+			const project = projects[projectKey];
+			if (project && modal && modalImage && modalTitle && modalYear && modalDescription && modalSkills) {
+				modalImage.src = projectImages[projectKey] || '';
+				modalImage.alt = `${project.title} cover image`;
+				modalTitle.textContent = project.title;
+				modalYear.textContent = project.time;
+				modalDescription.innerHTML = project.description;
+
+				// Clear and populate skills
+				modalSkills.innerHTML = '';
+				project.skills.forEach(skill => {
+					const skillTag = document.createElement('span');
+					skillTag.className = 'skill-tag';
+					skillTag.textContent = skill;
+					modalSkills.appendChild(skillTag);
+				});
+
+				modal.style.display = 'block';
+				document.body.style.overflow = 'hidden'; // Prevent background scrolling
+			}
+		}
+
+		// Function to close modal
+		function closeModal() {
+			if (modal) {
+				modal.style.display = 'none';
+				document.body.style.overflow = 'auto'; // Restore scrolling
+			}
+		}
+
+		// Add click event listeners and dynamic hover text to project cards
+		document.querySelectorAll('.project-card').forEach(card => {
+			// Determine project key from class names
+			let projectKey = '';
+			if (card.classList.contains('motorola-project')) projectKey = 'motorola';
+			else if (card.classList.contains('twnh-project')) projectKey = 'tnwh';
+			else if (card.classList.contains('jamnesia-project')) projectKey = 'jamnesia';
+			else if (card.classList.contains('semel-project')) projectKey = 'semel';
+
+			if (projectKey) {
+				const project = projects[projectKey];
+
+				// Set dynamic hover text using CSS custom properties
+				if (project) {
+					const hoverText = `"${project.title}\\A${project.role}\\A ${project.time}"`;
+					card.style.setProperty('--hover-content', `${hoverText}`);
+				}
+
+				// Add click event listener
+				card.addEventListener('click', () => openModal(projectKey));
+			}
+		});
+
+		// Close modal when clicking the close button
+		if (closeButton) {
+			closeButton.addEventListener('click', closeModal);
+		}
+
+		// Close modal when clicking outside the modal content
+		if (modal) {
+			modal.addEventListener('click', e => {
+				if (e.target === modal) {
+					closeModal();
+				}
+			});
+		}
+
+		// Close modal on Escape key
+		document.addEventListener('keydown', e => {
+			if (e.key === 'Escape' && modal && modal.style.display === 'block') {
+				closeModal();
+			}
+		});
+	});
+</script>
+
 <style>
 	.projects {
-		padding: 4rem 2rem;
+		padding: 1rem 2rem;
 		background-color: var(--beige);
-		min-height: 100vh;
+		min-height: 40vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 	}
 
-	.projects h2 {
-		font-size: 2.5rem;
-		font-weight: 700;
-		color: var(--text-dark);
+	.projects hr {
+		border: none;
+		height: 2px;
+		background-color: var(--text-dark);
 		margin-bottom: 3rem;
-		text-align: center;
+		width: 60%;
 	}
 
 	.projects-grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		gap: 2rem;
-		max-width: 800px;
-		width: 100%;
+		gap: 2.5rem;
+		
+		width: 80%;
 	}
 
 	.project-card {
@@ -55,7 +202,7 @@
 		cursor: pointer;
 		transition: transform 0.3s ease, box-shadow 0.3s ease;
 		border: 2px solid transparent;
-		min-height: 200px;
+		min-height: 300px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -86,7 +233,7 @@
 	}
 
 	.project-with-image:hover::after {
-		content: "";
+		content: var(--hover-content);
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -110,22 +257,6 @@
 		font-weight: 600;
 	}
 
-	.motorola-project:hover::after {
-		content: "Motorola \A Software Engineering Intern, 2025";
-	}
-
-	.twnh-project:hover::after {
-		content: "There is Nothing Wrong Here \A Programmer, 2025";
-	}
-
-	.jamnesia-project:hover::after {
-		content: "Jamnesia \A Programmer, 2025";
-	}
-
-	.semel-project:hover::after {
-		content: "UCLA Semel Institute for Neuroscience \A Machine Learning, 2025";
-	}
-
 	.project-card h3 {
 		font-size: 1.25rem;
 		font-weight: 600;
@@ -145,8 +276,7 @@
 			min-height: auto;
 		}
 
-		.projects h2 {
-			font-size: 2rem;
+		.projects hr {
 			margin-bottom: 2rem;
 		}
 
@@ -157,7 +287,204 @@
 
 		.project-card {
 			padding: 1.5rem;
-			min-height: 150px;
+			min-height: 250px;
 		}
 	}
+
+/* Modal Styles */
+.project-modal {
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.8);
+	backdrop-filter: blur(5px);
+}
+
+.modal-content {
+	background-color: var(--soft-yellow);
+	margin: 5% auto;
+	padding: 0;
+	width: 90%;
+	max-width: 700px;
+	border-radius: 15px;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+	animation: modalFadeIn 0.3s ease-out;
+	position: relative;
+}
+
+@keyframes modalFadeIn {
+	from {
+		opacity: 0;
+		transform: scale(0.9) translateY(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1) translateY(0);
+	}
+}
+
+.close-button {
+	color: var(--text-dark);
+	position: absolute;
+	top: 15px;
+	right: 20px;
+	font-size: 28px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: color 0.2s ease;
+	z-index: 1001;
+}
+
+.close-button:hover {
+	color: var(--text-muted);
+}
+
+.modal-header {
+	padding: 2rem 2rem 1rem 2rem;
+	border-bottom: 1px solid var(--text-muted);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.modal-header h3 {
+	font-size: 1.8rem;
+	font-weight: 700;
+	color: var(--text-dark);
+	margin: 0;
+	flex: 1;
+}
+
+.project-year {
+	font-size: 1rem;
+	color: var(--text-muted);
+	font-weight: 500;
+	background-color: var(--beige);
+	padding: 0.25rem 0.75rem;
+	border-radius: 20px;
+	white-space: nowrap;
+}
+
+.modal-image-container {
+	padding: 0 2rem 1rem 2rem;
+	display: flex;
+	justify-content: center;
+}
+
+.modal-image-container img {
+	width: 100%;
+	max-width: 500px;
+	height: auto;
+	border-radius: 10px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.modal-body {
+	padding: 2rem;
+}
+
+.modal-body p {
+	font-size: 1.1rem;
+	line-height: 1.6;
+	color: var(--text-dark);
+	margin-bottom: 2rem;
+}
+
+.modal-body p a {
+	color: var(--text-dark);
+	text-decoration: underline;
+	font-weight: 600;
+	transition: color 0.2s ease;
+}
+
+.modal-body p a:hover {
+	color: var(--text-muted);
+}
+
+.skills h4 {
+	font-size: 1.2rem;
+	font-weight: 600;
+	color: var(--text-dark);
+	margin-bottom: 1rem;
+	margin-top: 0;
+}
+
+.skill-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.skill-tag {
+	background-color: var(--beige);
+	color: var(--text-dark);
+	padding: 0.5rem 1rem;
+	border-radius: 25px;
+	font-size: 0.9rem;
+	font-weight: 500;
+	border: 1px solid var(--text-muted);
+	transition: all 0.2s ease;
+}
+
+.skill-tag:hover {
+	background-color: var(--text-muted);
+	color: white;
+	transform: translateY(-1px);
+}
+
+/* Modal Responsive Design */
+@media (max-width: 768px) {
+	.modal-content {
+		margin: 2% auto;
+		width: 95%;
+	}
+
+	.modal-header {
+		padding: 1.5rem 1.5rem 1rem 1.5rem;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5rem;
+	}
+
+	.modal-header h3 {
+		font-size: 1.5rem;
+	}
+
+	.modal-image-container {
+		padding: 0 1.5rem 1rem 1.5rem;
+	}
+
+	.modal-image-container img {
+		max-width: 100%;
+	}
+
+	.modal-body {
+		padding: 1.5rem;
+	}
+
+	.modal-body p {
+		font-size: 1rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.skills h4 {
+		font-size: 1.1rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.skill-tags {
+		gap: 0.4rem;
+	}
+
+	.skill-tag {
+		padding: 0.4rem 0.8rem;
+		font-size: 0.8rem;
+	}
+}
 </style>
