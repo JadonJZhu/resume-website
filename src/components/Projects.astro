@@ -71,7 +71,7 @@ const projects = {
 	</div>
 </div>
 
-<script define:vars={{ projects }}>
+<script define:vars={{ projects }}	>
 	document.addEventListener('DOMContentLoaded', () => {
 		const modal = document.getElementById('project-modal');
 		const modalImage = document.getElementById('modal-image');
@@ -188,10 +188,11 @@ const projects = {
 
 	.projects-grid {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: 1fr;
 		gap: 2.5rem;
-		
-		width: 80%;
+
+		width: 90%;
+		max-width: 800px;
 	}
 
 	.project-card {
@@ -202,7 +203,7 @@ const projects = {
 		cursor: pointer;
 		transition: transform 0.3s ease, box-shadow 0.3s ease;
 		border: 2px solid transparent;
-		min-height: 300px;
+		min-height: 400px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -232,14 +233,14 @@ const projects = {
 		border-radius: 10px;
 	}
 
-	.project-with-image:hover::after {
+	.project-with-image::after {
 		content: var(--hover-content);
 		position: absolute;
 		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background-color: rgba(0, 0, 0, 0.7);
+		background-color: rgba(0, 0, 0, 0.5);
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -253,7 +254,7 @@ const projects = {
 		z-index: 1;
 	}
 
-	.project-with-image:hover::after::first-line {
+	.project-with-image::after::first-line {
 		font-weight: 600;
 	}
 
@@ -282,12 +283,13 @@ const projects = {
 
 		.projects-grid {
 			grid-template-columns: 1fr;
-			gap: 1.5rem;
+			gap: 2rem;
+			width: 95%;
 		}
 
 		.project-card {
-			padding: 1.5rem;
-			min-height: 250px;
+			padding: 2rem;
+			min-height: 350px;
 		}
 	}
 
