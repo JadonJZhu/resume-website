@@ -11,14 +11,14 @@ const projects = {
 	},
 	tnwh: {
 		title: "There is Nothing Wrong Here",
-		role: "Programmer",
+		role: "Lead Software Engineer",
 		time: "Fall 2025",
 		description: "For this psychological horror visual novel submitted to the <a href='https://itch.io/jam/spooktober-2025' target='_blank' rel='noopener noreferrer'>Spooktober 2025 Visual Novel Jam</a>, I served as lead programmer on a team of 4 writers, 3 artists, and 2 programmers. We built it using Godot and GDscript, emphasizing clean and modular code through inheritance and composition patterns. Players can experience the game at <a href='https://jadonz.itch.io/there-is-nothing-wrong-here' target='_blank' rel='noopener noreferrer'>here</a>.",
 		skills: ["Godot", "GDscript", "Leadership", "Game Development", "Object-Oriented Programming", "Clean Code Architecture"]
 	},
 	jamnesia: {
 		title: "Jamnesia",
-		role: "Programmer",
+		role: "Lead Software Engineer",
 		time: "Spring 2025",
 		description: "I was a lead programmer in an award-winning game development team that won over $6000 in prize value as part of the <a href='https://itch.io/jam/ucla-fiat-ludum-2025' target='_blank' rel='noopener noreferrer'>Fiat Ludum Game Jam</a> competition at UCLA. Players can experience the game at <a href='https://jadonz.itch.io/jamnesia' target='_blank' rel='noopener noreferrer'>here</a>.",
 		skills: ["Godot", "GDScript", "Game Development", "Leadership"]
@@ -29,6 +29,13 @@ const projects = {
 		time: "2024-2025",
 		description: "At the UCLA Semel Institute for Neuroscience, as a volunteer for the <a href='https://yanglab.npih.ucla.edu/?page_id=18' target='_blank' rel='noopener noreferrer'>X. William Yang Lab</a>, I trained a convolutional neural network (CNN) to segment 3-D images of mouse brain neurons, developed Python scripts as plugins to ImageJ to facilitate rapid, automated 3-D image processing, and reconstructed 3-D images of neurons manually using the digital imaging software Neutube.",
 		skills: ["Python", "PyTorch", "Convolutional Neural Networks", "Image Processing", "Machine Learning", "ImageJ", "Neutube"]
+	},
+	golotl: {
+		title: "Golotl",
+		role: "Lead Systems Design Engineer",
+		time: "Fall 2025",
+		description: "I was a system design engineer for the following original 2-D puzzle game built in Godot. I architected puzzle gameplay emphasizing separation of responsibilities with stateful management classes and stateless calculator classes. I lead a interdisciplinary team of five individuals, ranging from artists to musicians to writers to game designers. Play the game at <a href='https://jadonz.itch.io/golotl' target='_blank' rel='noopener noreferrer'>here</a>.",
+		skills: ["Godot", "Game Design", "Leadership", "Systems Architecture", "Team Management", "Puzzle Design"]
 	}
 };
 ---
@@ -46,6 +53,9 @@ const projects = {
 		</div>
 		<div class="project-card project-with-image jamnesia-project">
 			<img src="/projects/jamnesia/jamnesia.gif" alt="Jamnesia Project">
+		</div>
+		<div class="project-card project-with-image golotl-project">
+			<img src="/projects/golotl/golotl.gif" alt="Golotl Project">
 		</div>
 	</div>
 </section>
@@ -86,7 +96,8 @@ const projects = {
 			motorola: '/projects/motorola/military-radio.jpg',
 			tnwh: '/projects/tnwh/tnwh.gif',
 			jamnesia: '/projects/jamnesia/jamnesia.gif',
-			semel: '/projects/semel/semel.jpg'
+			semel: '/projects/semel/semel.jpg',
+			golotl: '/projects/golotl/golotl.gif'
 		};
 
 		// Function to open modal with project data
@@ -129,6 +140,7 @@ const projects = {
 			else if (card.classList.contains('twnh-project')) projectKey = 'tnwh';
 			else if (card.classList.contains('jamnesia-project')) projectKey = 'jamnesia';
 			else if (card.classList.contains('semel-project')) projectKey = 'semel';
+			else if (card.classList.contains('golotl-project')) projectKey = 'golotl';
 
 			if (projectKey) {
 				const project = projects[projectKey];
