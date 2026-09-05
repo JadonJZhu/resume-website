@@ -3,36 +3,26 @@
 //
 // There is ONE list of projects: the JSON files under src/content/projects/,
 // typed by src/content.config.ts. Adding a project means adding one file there
-// and touching nothing in this component (riot/PLAN.md §3.3). Until 2026-09-05
-// this file held four lists that had to stay in sync, and two of them had
-// already drifted apart: `motorola` and `semel` had an image-map entry and a
-// class-lookup branch but no project data and no card, and the CSS class was
-// spelled `twnh-project` where the data key was `tnwh`.
+// and touching nothing in this component. Until 2026-09-05 this file held four
+// lists of projects that had to stay in sync, and they had already drifted.
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { hoverContent } from '../lib/hover-content.ts';
 
 type ProjectData = CollectionEntry<'projects'>['data'];
 
-// The publish contract emits no ordering field, so an entry without `order`
-// sorts last and `id` breaks the tie, which keeps the sort total and stable.
+// An entry without `order` sorts last and `id` breaks the tie, which keeps the
+// sort total and stable however incomplete the data is.
 const SORTS_LAST = Number.MAX_SAFE_INTEGER;
 const entries = (await getCollection('projects')).sort(
 	(a, b) =>
 		(a.data.order ?? SORTS_LAST) - (b.data.order ?? SORTS_LAST) || a.id.localeCompare(b.id),
 );
 
-// The card scrim text, as a build-time custom property. This reproduces the
-// string the old client script assembled at runtime exactly: segments joined by
-// a literal \A (a CSS newline) with no space around it, and the period segment
-// carrying one leading space. `role` is optional, because the contract does not
-// emit it for solo work, and its segment and separator drop out with it.
-// Building the value here also removes the flash where the scrim was blank
-// until the client script ran.
-function hoverContent(data: ProjectData): string {
-	const segments = [data.title, data.role, ` ${data.period}`].filter(
-		(segment): segment is string => segment !== undefined,
-	);
-	return `"${segments.join('\\A')}"`;
-}
+// The scrim text is built here rather than by the client script that used to
+// assemble it, which removes the flash where the scrim was blank until the
+// script ran. Every segment is escaped for CSS; see src/lib/hover-content.ts
+// for what each unescaped character did.
+const scrim = (data: ProjectData): string => `--hover-content: ${hoverContent(data)}`;
 
 // Only what the modal reads, keyed by slug. The card carries the same slug in
 // data-slug, so there is no class-name lookup table to keep in sync.
@@ -58,8 +48,11 @@ const modalData = Object.fromEntries(
 				<div
 					class="project-card project-with-image"
 					data-slug={entry.id}
-					style={`--hover-content: ${hoverContent(entry.data)}`}
+					style={scrim(entry.data)}
 				>
+					{/* Both formats are <source> children and the <video> carries
+					    no `src`: a <video src=...> makes its <source> children
+					    unreachable, so the webm would never be chosen. */}
 					{entry.data.hero.video ? (
 						<video autoplay muted loop playsinline poster={entry.data.hero.poster}>
 							{entry.data.hero.webm && (
