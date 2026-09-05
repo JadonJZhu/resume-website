@@ -40,6 +40,10 @@ const modalData = Object.fromEntries(
 			// holds no knowledge of which link keys exist. A new key is a line
 			// in src/lib/project-links.ts and nothing in this file.
 			links: projectLinks(entry.data.links),
+			// The modal deliberately shows the still poster, not the video.
+			// This used to be the animated GIF and is a still PNG since
+			// 2026-09-05. The card carries the motion; making the modal play
+			// too is a separate change nobody has asked for.
 			image: entry.data.hero.poster,
 		},
 	]),
