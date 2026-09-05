@@ -1,42 +1,81 @@
 ---
-// Projects component - contains the projects showcase section
+// Projects component - contains the projects showcase section.
+//
+// There is ONE list of projects: the JSON files under src/content/projects/,
+// typed by src/content.config.ts. Adding a project means adding one file there
+// and touching nothing in this component (riot/PLAN.md §3.3). Until 2026-09-05
+// this file held four lists that had to stay in sync, and two of them had
+// already drifted apart: `motorola` and `semel` had an image-map entry and a
+// class-lookup branch but no project data and no card, and the CSS class was
+// spelled `twnh-project` where the data key was `tnwh`.
+import { getCollection, type CollectionEntry } from 'astro:content';
 
-const projects = {
-	tnwh: {
-		title: "There is Nothing Wrong Here",
-		role: "Lead Software Engineer",
-		time: "Fall 2025",
-		description: "For this psychological horror visual novel submitted to the <a href='https://itch.io/jam/spooktober-2025' target='_blank' rel='noopener noreferrer'>Spooktober 2025 Visual Novel Jam</a>, I served as lead programmer on a team of 4 writers, 3 artists, and 2 programmers. We built it using Godot and GDscript, emphasizing clean and modular code through inheritance and composition patterns. Players can experience the game at <a href='https://jadonz.itch.io/there-is-nothing-wrong-here' target='_blank' rel='noopener noreferrer'>here</a>.",
-		skills: ["Godot", "GDscript", "Leadership", "Game Development", "Object-Oriented Programming", "Clean Code Architecture"]
-	},
-	jamnesia: {
-		title: "Jamnesia",
-		role: "Lead Software Engineer",
-		time: "Spring 2025",
-		description: "I was a lead programmer in an award-winning game development team that won over $6000 in prize value as part of the <a href='https://itch.io/jam/ucla-fiat-ludum-2025' target='_blank' rel='noopener noreferrer'>Fiat Ludum Game Jam</a> competition at UCLA. Players can experience the game at <a href='https://jadonz.itch.io/jamnesia' target='_blank' rel='noopener noreferrer'>here</a>.",
-		skills: ["Godot", "GDScript", "Game Development", "Leadership"]
-	},
-	golotl: {
-		title: "Golotl",
-		role: "Lead Systems Design Engineer",
-		time: "Fall 2025",
-		description: "I was a system design engineer for the following original 2-D puzzle game built in Godot. I architected puzzle gameplay emphasizing separation of responsibilities with stateful management classes and stateless calculator classes. I lead a interdisciplinary team of five individuals, ranging from artists to musicians to writers to game designers. Play the game at <a href='https://jadonz.itch.io/golotl' target='_blank' rel='noopener noreferrer'>here</a>.",
-		skills: ["Godot", "Game Design", "Leadership", "Systems Architecture", "Team Management", "Puzzle Design"]
-	}
-};
+type ProjectData = CollectionEntry<'projects'>['data'];
+
+// The publish contract emits no ordering field, so an entry without `order`
+// sorts last and `id` breaks the tie, which keeps the sort total and stable.
+const SORTS_LAST = Number.MAX_SAFE_INTEGER;
+const entries = (await getCollection('projects')).sort(
+	(a, b) =>
+		(a.data.order ?? SORTS_LAST) - (b.data.order ?? SORTS_LAST) || a.id.localeCompare(b.id),
+);
+
+// The card scrim text, as a build-time custom property. This reproduces the
+// string the old client script assembled at runtime exactly: segments joined by
+// a literal \A (a CSS newline) with no space around it, and the period segment
+// carrying one leading space. `role` is optional, because the contract does not
+// emit it for solo work, and its segment and separator drop out with it.
+// Building the value here also removes the flash where the scrim was blank
+// until the client script ran.
+function hoverContent(data: ProjectData): string {
+	const segments = [data.title, data.role, ` ${data.period}`].filter(
+		(segment): segment is string => segment !== undefined,
+	);
+	return `"${segments.join('\\A')}"`;
+}
+
+// Only what the modal reads, keyed by slug. The card carries the same slug in
+// data-slug, so there is no class-name lookup table to keep in sync.
+const modalData = Object.fromEntries(
+	entries.map((entry) => [
+		entry.id,
+		{
+			title: entry.data.title,
+			period: entry.data.period,
+			blurb: entry.data.blurb,
+			legacyHtmlBlurb: entry.data.legacyHtmlBlurb,
+			skills: entry.data.skills,
+			image: entry.data.hero.poster,
+		},
+	]),
+);
 ---
 
 <section class="projects">
 	<div class="projects-grid">
-		<div class="project-card project-with-image twnh-project">
-			<img src="/projects/tnwh/tnwh.gif" alt="There is Nothing Wrong Here Project">
-		</div>
-		<div class="project-card project-with-image jamnesia-project">
-			<img src="/projects/jamnesia/jamnesia.gif" alt="Jamnesia Project">
-		</div>
-		<div class="project-card project-with-image golotl-project">
-			<img src="/projects/golotl/golotl.gif" alt="Golotl Project">
-		</div>
+		{
+			entries.map((entry) => (
+				<div
+					class="project-card project-with-image"
+					data-slug={entry.id}
+					style={`--hover-content: ${hoverContent(entry.data)}`}
+				>
+					{entry.data.hero.video ? (
+						<video autoplay muted loop playsinline poster={entry.data.hero.poster}>
+							{entry.data.hero.webm && (
+								<source src={entry.data.hero.webm} type="video/webm" />
+							)}
+							<source src={entry.data.hero.video} type="video/mp4" />
+						</video>
+					) : (
+						<img
+							src={entry.data.hero.poster}
+							alt={entry.data.hero.alt ?? `${entry.data.title} Project`}
+						/>
+					)}
+				</div>
+			))
+		}
 	</div>
 </section>
 
@@ -61,7 +100,7 @@ const projects = {
 	</div>
 </div>
 
-<script define:vars={{ projects }}	>
+<script define:vars={{ modalData }}>
 	document.addEventListener('DOMContentLoaded', () => {
 		const modal = document.getElementById('project-modal');
 		const modalImage = document.getElementById('modal-image');
@@ -71,24 +110,25 @@ const projects = {
 		const modalSkills = document.getElementById('modal-skills');
 		const closeButton = document.querySelector('.close-button');
 
-		// Map project keys to image paths
-		const projectImages = {
-			motorola: '/projects/motorola/military-radio.jpg',
-			tnwh: '/projects/tnwh/tnwh.gif',
-			jamnesia: '/projects/jamnesia/jamnesia.gif',
-			semel: '/projects/semel/semel.jpg',
-			golotl: '/projects/golotl/golotl.gif'
-		};
-
 		// Function to open modal with project data
-		function openModal(projectKey) {
-			const project = projects[projectKey];
+		function openModal(slug) {
+			const project = modalData[slug];
 			if (project && modal && modalImage && modalTitle && modalYear && modalDescription && modalSkills) {
-				modalImage.src = projectImages[projectKey] || '';
+				modalImage.src = project.image || '';
 				modalImage.alt = `${project.title} cover image`;
 				modalTitle.textContent = project.title;
-				modalYear.textContent = project.time;
-				modalDescription.innerHTML = project.description;
+				modalYear.textContent = project.period;
+
+				// A blurb written by the publish contract is plain text and the
+				// generator has no reason to escape it, so it is inserted as text.
+				// Only the three projects that predate the contract carry
+				// hand-written HTML with inline anchors, and they declare that in
+				// their own JSON rather than have it guessed from the string.
+				if (project.legacyHtmlBlurb) {
+					modalDescription.innerHTML = project.blurb;
+				} else {
+					modalDescription.textContent = project.blurb;
+				}
 
 				// Clear and populate skills
 				modalSkills.innerHTML = '';
@@ -112,27 +152,12 @@ const projects = {
 			}
 		}
 
-		// Add click event listeners and dynamic hover text to project cards
+		// Add click event listeners to project cards. Each card carries its own
+		// slug, so nothing here has to know a project exists.
 		document.querySelectorAll('.project-card').forEach(card => {
-			// Determine project key from class names
-			let projectKey = '';
-			if (card.classList.contains('motorola-project')) projectKey = 'motorola';
-			else if (card.classList.contains('twnh-project')) projectKey = 'tnwh';
-			else if (card.classList.contains('jamnesia-project')) projectKey = 'jamnesia';
-			else if (card.classList.contains('semel-project')) projectKey = 'semel';
-			else if (card.classList.contains('golotl-project')) projectKey = 'golotl';
-
-			if (projectKey) {
-				const project = projects[projectKey];
-
-				// Set dynamic hover text using CSS custom properties
-				if (project) {
-					const hoverText = `"${project.title}\\A${project.role}\\A ${project.time}"`;
-					card.style.setProperty('--hover-content', `${hoverText}`);
-				}
-
-				// Add click event listener
-				card.addEventListener('click', () => openModal(projectKey));
+			const slug = card.dataset.slug;
+			if (slug && modalData[slug]) {
+				card.addEventListener('click', () => openModal(slug));
 			}
 		});
 
@@ -215,7 +240,7 @@ const projects = {
 		aspect-ratio: 5 / 3;
 	}
 
-	.project-with-image img {
+	.project-with-image :is(img, video) {
 		position: absolute;
 		top: 0;
 		left: 0;

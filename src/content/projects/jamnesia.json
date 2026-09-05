@@ -1,0 +1,18 @@
+{
+  "title": "Jamnesia",
+  "role": "Lead Software Engineer",
+  "period": "Spring 2025",
+  "blurb": "I was a lead programmer in an award-winning game development team that won over $6000 in prize value as part of the <a href='https://itch.io/jam/ucla-fiat-ludum-2025' target='_blank' rel='noopener noreferrer'>Fiat Ludum Game Jam</a> competition at UCLA. Players can experience the game at <a href='https://jadonz.itch.io/jamnesia' target='_blank' rel='noopener noreferrer'>here</a>.",
+  "skills": [
+    "Godot",
+    "GDScript",
+    "Game Development",
+    "Leadership"
+  ],
+  "order": 2,
+  "legacyHtmlBlurb": true,
+  "hero": {
+    "poster": "/projects/jamnesia/jamnesia.gif",
+    "alt": "Jamnesia Project"
+  }
+}

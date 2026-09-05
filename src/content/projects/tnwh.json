@@ -1,0 +1,20 @@
+{
+  "title": "There is Nothing Wrong Here",
+  "role": "Lead Software Engineer",
+  "period": "Fall 2025",
+  "blurb": "For this psychological horror visual novel submitted to the <a href='https://itch.io/jam/spooktober-2025' target='_blank' rel='noopener noreferrer'>Spooktober 2025 Visual Novel Jam</a>, I served as lead programmer on a team of 4 writers, 3 artists, and 2 programmers. We built it using Godot and GDscript, emphasizing clean and modular code through inheritance and composition patterns. Players can experience the game at <a href='https://jadonz.itch.io/there-is-nothing-wrong-here' target='_blank' rel='noopener noreferrer'>here</a>.",
+  "skills": [
+    "Godot",
+    "GDscript",
+    "Leadership",
+    "Game Development",
+    "Object-Oriented Programming",
+    "Clean Code Architecture"
+  ],
+  "order": 1,
+  "legacyHtmlBlurb": true,
+  "hero": {
+    "poster": "/projects/tnwh/tnwh.gif",
+    "alt": "There is Nothing Wrong Here Project"
+  }
+}

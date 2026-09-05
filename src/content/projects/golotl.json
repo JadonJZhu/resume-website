@@ -1,0 +1,20 @@
+{
+  "title": "Golotl",
+  "role": "Lead Systems Design Engineer",
+  "period": "Fall 2025",
+  "blurb": "I was a system design engineer for the following original 2-D puzzle game built in Godot. I architected puzzle gameplay emphasizing separation of responsibilities with stateful management classes and stateless calculator classes. I lead a interdisciplinary team of five individuals, ranging from artists to musicians to writers to game designers. Play the game at <a href='https://jadonz.itch.io/golotl' target='_blank' rel='noopener noreferrer'>here</a>.",
+  "skills": [
+    "Godot",
+    "Game Design",
+    "Leadership",
+    "Systems Architecture",
+    "Team Management",
+    "Puzzle Design"
+  ],
+  "order": 3,
+  "legacyHtmlBlurb": true,
+  "hero": {
+    "poster": "/projects/golotl/golotl.gif",
+    "alt": "Golotl Project"
+  }
+}
