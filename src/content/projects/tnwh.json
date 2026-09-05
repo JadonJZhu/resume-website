@@ -14,7 +14,9 @@
   "order": 1,
   "legacyHtmlBlurb": true,
   "hero": {
-    "poster": "/projects/tnwh/tnwh.gif",
+    "poster": "/projects/tnwh/hero.png",
+    "video": "/projects/tnwh/hero.mp4",
+    "webm": "/projects/tnwh/hero.webm",
     "alt": "There is Nothing Wrong Here Project"
   }
 }

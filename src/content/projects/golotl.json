@@ -14,7 +14,9 @@
   "order": 3,
   "legacyHtmlBlurb": true,
   "hero": {
-    "poster": "/projects/golotl/golotl.gif",
+    "poster": "/projects/golotl/hero.png",
+    "video": "/projects/golotl/hero.mp4",
+    "webm": "/projects/golotl/hero.webm",
     "alt": "Golotl Project"
   }
 }

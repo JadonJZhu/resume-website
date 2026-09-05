@@ -12,7 +12,9 @@
   "order": 2,
   "legacyHtmlBlurb": true,
   "hero": {
-    "poster": "/projects/jamnesia/jamnesia.gif",
+    "poster": "/projects/jamnesia/hero.png",
+    "video": "/projects/jamnesia/hero.mp4",
+    "webm": "/projects/jamnesia/hero.webm",
     "alt": "Jamnesia Project"
   }
 }
