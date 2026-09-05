@@ -6,7 +6,7 @@
 // before the row existed.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { LINK_LABELS, projectLinks } from './project-links.ts';
+import { LINK_LABELS, isHttpUrl, projectLinks } from './project-links.ts';
 
 test('no links object yields nothing to render', () => {
 	assert.deepEqual(projectLinks(undefined), []);
@@ -16,13 +16,12 @@ test('the schema default of {} yields nothing to render', () => {
 	assert.deepEqual(projectLinks({}), []);
 });
 
-test('lanewalk renders both of its links in schema order', () => {
-	// examples/lanewalk/resume-entry.json, verbatim: demo written before repo.
+test('schema order wins over the order the JSON wrote the keys in', () => {
 	assert.deepEqual(
-		projectLinks({ demo: 'https://lanewalk.pages.dev', repo: 'https://github.com/JadonJZhu/lanewalk' }),
+		projectLinks({ demo: 'https://example.com/demo', repo: 'https://example.com/repo' }),
 		[
-			{ key: 'repo', label: 'Repository', url: 'https://github.com/JadonJZhu/lanewalk' },
-			{ key: 'demo', label: 'Demo', url: 'https://lanewalk.pages.dev' },
+			{ key: 'repo', label: 'Repository', url: 'https://example.com/repo' },
+			{ key: 'demo', label: 'Demo', url: 'https://example.com/demo' },
 		],
 	);
 });
@@ -42,6 +41,27 @@ test('order is LINK_LABELS order, not the order the JSON happened to use', () =>
 
 test('an empty string is not a link', () => {
 	assert.deepEqual(projectLinks({ repo: '' }), []);
+});
+
+// The schema rejects these too (src/content.config.ts), so a real build never
+// reaches this branch. It exists because the value ends up in an `href` and the
+// only thing stopping a `javascript:` URL from running in this origin today is
+// a `target="_blank"` set for an unrelated reason.
+test('only http and https survive into an href', () => {
+	for (const url of [
+		'javascript:alert(1)',
+		'JavaScript:alert(1)',
+		'data:text/html,<script></script>',
+		'vbscript:msgbox(1)',
+		'not a url at all',
+	]) {
+		assert.equal(isHttpUrl(url), false, url);
+		assert.deepEqual(projectLinks({ repo: url }), [], url);
+	}
+	for (const url of ['http://example.com/a', 'https://example.com/a', 'HTTPS://example.com/a']) {
+		assert.equal(isHttpUrl(url), true, url);
+		assert.equal(projectLinks({ repo: url }).length, 1, url);
+	}
 });
 
 test('every label is a plain noun with no punctuation or emoji', () => {

@@ -102,6 +102,11 @@ const modalData = Object.fromEntries(
 	</div>
 </div>
 
+{/* `define:vars` forces `is:inline`, so this script is emitted into the page
+    verbatim: no bundling, no minification, and every comment below ships to the
+    browser. Measured 2026-09-05 by diffing dist/index.html across a comment-only
+    edit. Keep the comments here short for that reason, and put the long form in
+    the .ts modules, which are bundled. */}
 <script define:vars={{ modalData }}>
 	document.addEventListener('DOMContentLoaded', () => {
 		const modal = document.getElementById('project-modal');
@@ -145,7 +150,9 @@ const modalData = Object.fromEntries(
 				// Links. `hidden` when there are none, so a link-less project
 				// renders the modal exactly as it did before links existed.
 				// Anchors are built as elements and the label is set as text,
-				// so nothing in the project data can become markup.
+				// so nothing in the project data can become markup. The `href`
+				// is a separate problem, checked for scheme upstream; the
+				// evidence lives in src/lib/project-links.ts.
 				if (modalLinks) {
 					modalLinks.innerHTML = '';
 					const links = project.links || [];

@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { isHttpUrl } from './lib/project-links.ts';
 
 // One JSON file per project. The filename stem is the entry `id` and therefore
 // the project's slug, so nothing inside the file has to repeat it.
@@ -14,6 +15,18 @@ import { glob } from 'astro/loaders';
 // unmodelled key, so a generator that emitted a new link type would have it
 // vanish with no log line. Strict turns that into a build failure that names the
 // key.
+
+// A link URL that will be written straight into an `href`. `z.string().url()`
+// alone is not enough: it accepts `javascript:`, `data:` and `vbscript:`, all
+// measured on this repo's zod 3.25.76 on 2026-09-05, and the rule and its
+// evidence live in src/lib/project-links.ts. Rejecting here makes a bad URL a
+// build failure that names the key rather than a live anchor nobody looked at.
+const httpUrl = (key: string) =>
+  z
+    .string()
+    .url()
+    .refine(isHttpUrl, { message: `links.${key} must be an http:// or https:// URL` });
+
 const projects = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/projects' }),
   schema: z
@@ -44,10 +57,10 @@ const projects = defineCollection({
 
       links: z
         .object({
-          repo: z.string().url().optional(),
-          demo: z.string().url().optional(),
-          release: z.string().url().optional(),
-          video: z.string().url().optional(),
+          repo: httpUrl('repo').optional(),
+          demo: httpUrl('demo').optional(),
+          release: httpUrl('release').optional(),
+          video: httpUrl('video').optional(),
         })
         .strict()
         .default({}),
