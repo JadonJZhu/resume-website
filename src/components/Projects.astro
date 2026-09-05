@@ -7,6 +7,7 @@
 // lists of projects that had to stay in sync, and they had already drifted.
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { hoverContent } from '../lib/hover-content.ts';
+import { projectLinks } from '../lib/project-links.ts';
 
 type ProjectData = CollectionEntry<'projects'>['data'];
 
@@ -35,6 +36,10 @@ const modalData = Object.fromEntries(
 			blurb: entry.data.blurb,
 			legacyHtmlBlurb: entry.data.legacyHtmlBlurb,
 			skills: entry.data.skills,
+			// Already reduced to an ordered array here, so the client script
+			// holds no knowledge of which link keys exist. A new key is a line
+			// in src/lib/project-links.ts and nothing in this file.
+			links: projectLinks(entry.data.links),
 			image: entry.data.hero.poster,
 		},
 	]),
@@ -85,6 +90,10 @@ const modalData = Object.fromEntries(
 		</div>
 		<div class="modal-body">
 			<p id="modal-description"></p>
+			{/* Empty and `hidden` until a project with links opens. Most
+			    projects have none, and for those this element must occupy no
+			    space and add no separator. */}
+			<p id="modal-links" class="project-links" hidden></p>
 			<div class="skills">
 				<h4>Skills Used:</h4>
 				<div id="modal-skills" class="skill-tags"></div>
@@ -101,6 +110,7 @@ const modalData = Object.fromEntries(
 		const modalYear = document.getElementById('modal-year');
 		const modalDescription = document.getElementById('modal-description');
 		const modalSkills = document.getElementById('modal-skills');
+		const modalLinks = document.getElementById('modal-links');
 		const closeButton = document.querySelector('.close-button');
 
 		// Function to open modal with project data
@@ -131,6 +141,25 @@ const modalData = Object.fromEntries(
 					skillTag.textContent = skill;
 					modalSkills.appendChild(skillTag);
 				});
+
+				// Links. `hidden` when there are none, so a link-less project
+				// renders the modal exactly as it did before links existed.
+				// Anchors are built as elements and the label is set as text,
+				// so nothing in the project data can become markup.
+				if (modalLinks) {
+					modalLinks.innerHTML = '';
+					const links = project.links || [];
+					links.forEach(link => {
+						const anchor = document.createElement('a');
+						anchor.href = link.url;
+						// The same treatment the hand-written blurb anchors use.
+						anchor.target = '_blank';
+						anchor.rel = 'noopener noreferrer';
+						anchor.textContent = link.label;
+						modalLinks.appendChild(anchor);
+					});
+					modalLinks.hidden = links.length === 0;
+				}
 
 				modal.style.display = 'block';
 				document.body.style.overflow = 'hidden'; // Prevent background scrolling
@@ -417,6 +446,35 @@ const modalData = Object.fromEntries(
 
 .modal-body p a:hover {
 	color: var(--text-muted);
+}
+
+/* Layout only, and deliberately no colour or weight of its own. The row is a
+   <p> inside .modal-body, so the anchor rules above are written to cover it and
+   nothing here has to restate them.
+
+   Those rules do not reach it TODAY, and that is a pre-existing bug rather than
+   anything about links. Astro scopes every selector by appending
+   `[data-astro-cid-amng4zvp]`, and an element the client script creates carries
+   no such attribute, so `.modal-body p a` and `.skill-tag` both miss every
+   element in this modal. Measured 2026-09-05 in headless Chrome: the itch.io
+   anchor inside a legacy blurb computes `rgb(0, 0, 238)` at weight 400, and a
+   skill tag computes no background, no border and no padding. A new link
+   therefore renders exactly like the anchors already beside it, which is the
+   point. Fixing the scoping is its own change, tracked in PLAN.md §4 Step 2b,
+   and it will pick this row up with no edit here.
+
+   `.project-links` itself is in the markup, so it does carry the attribute and
+   these two rules do apply. The `[hidden]` rule is not optional: `display:
+   flex` beats the UA `[hidden] { display: none }` and the row would show as an
+   empty gap on every project that has no links. */
+.project-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1.25rem;
+}
+
+.project-links[hidden] {
+	display: none;
 }
 
 .skills h4 {
